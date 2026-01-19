@@ -1,0 +1,14 @@
+public class Main {
+  int x;
+  int y;
+  Main(int x,int y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  public static void main(String[] args) {
+    Main my = new Main(22,19);
+    int sum = my.x + my.y;
+    System.out.println(sum);
+  }
+}

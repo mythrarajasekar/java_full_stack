@@ -1,0 +1,19 @@
+import java.util.*;
+public class Main {
+  int reg;
+  String name;
+  Main(int reg,String name) {
+      this.reg = reg;
+      this.name = name;
+  }
+
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    int reg = sc.nextInt();
+    String name = sc.next();
+    
+    Main my = new Main(reg,name);
+    System.out.println(my.reg);
+    System.out.println(my.name);
+  }
+}

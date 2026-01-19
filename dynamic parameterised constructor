@@ -1,0 +1,19 @@
+import java.util.*;
+public class Main {
+  int x;
+  int y;
+  Main(int x,int y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    int x = sc.nextInt();
+    int y = sc.nextInt();
+    
+    Main my = new Main(x,y);
+    int sum = my.x + my.y;
+    System.out.println(sum);
+  }
+}

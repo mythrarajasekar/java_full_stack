@@ -1,0 +1,46 @@
+import java.util.*;
+class basic{
+            String name = " ";
+            String dish = " ";
+            int time = 0;
+            int price = 0;
+        }
+public class Main {
+    public static void main(String[] args) {
+        basic n = new basic();
+        n.name = "Thalapakatti Biriyani";
+        n.dish = "Chicken Biriyani";
+        n.time = 15;
+        n.price = 300;
+        
+        System.out.println("Restaurant : " + n.name);
+        System.out.println();
+        System.out.println("dish : " + n.dish);
+        System.out.println("Time taken : " + n.time);
+        System.out.println("Price : $" + n.price);
+        
+        n.dish = "Mutton Biriyani";
+        n.time = 15;
+        n.price = 300;
+        
+        System.out.println();
+        System.out.println("dish : " + n.dish);
+        System.out.println("Time taken : " + n.time);
+        System.out.println("Price : $" + n.price);
+        
+        basic n1 = new basic();
+        n1.name = "Aasife Biriyani";
+        n1.dish = "Chicken Biriyani";
+        n1.time = 12;
+        n1.price = 250;
+        
+        System.out.println();
+        System.out.println("Restaurant : " + n1.name);
+        System.out.println();
+        System.out.println("dish : " + n1.dish);
+        System.out.println("Time taken : " + n1.time);
+        System.out.println("Price : $" + n1.price);
+        
+        
+    }
+}

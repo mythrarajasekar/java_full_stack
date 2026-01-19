@@ -1,0 +1,15 @@
+import java.util.*;
+
+class NotvalidException extends Exception{
+    
+}
+public class Main{
+    public static void main(String [] args){
+    Scanner sc = new Scanner(System.in);
+    try{
+        int a = sc.nextInt();
+        throw new NotvalidException();
+    }catch(Exception e){
+        System.out.println(e);
+    }
+}}

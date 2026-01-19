@@ -1,0 +1,17 @@
+import java.util.*;
+class Main {
+  private int id;
+  
+  public int getid(){
+      return id;
+  }
+  public void setid(int val){
+      id = val;
+  }
+  
+  public static void main(String[] args) {
+    Main my = new Main();
+    my.setid(22);
+    System.out.println(my.getid());
+  }
+}

@@ -1,0 +1,30 @@
+import java.util.*;
+class Main {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int start = sc.nextInt();
+		int end = sc.nextInt();
+		int count = 0;
+
+		for(int i = start; i <= end; i++) {
+			int temp = i;
+			boolean[] used = new boolean[10];
+			boolean unique = true;
+
+			while(temp > 0) {
+				int digit = temp % 10;
+				if(used[digit]) {
+					unique = false;
+					break;
+				}
+				used[digit] = true;
+				temp /= 10;
+			}
+			if(unique) {
+				count++;
+			}
+
+		}
+		System.out.println(count);
+	}
+}

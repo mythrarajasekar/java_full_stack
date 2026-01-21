@@ -1,0 +1,192 @@
+import java.util.Scanner;
+
+public class SmartClassroomAllocator {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        Resource lab = new Resource("Lab");
+        Resource hall = new Resource("Seminar Hall");
+        Resource projector = new Resource("Projector");
+
+        while (true) {
+            System.out.println("\nSMART CLASSROOM RESOURCE ALLOCATOR");
+            System.out.println("1. Book Lab");
+            System.out.println("2. Book Seminar Hall");
+            System.out.println("3. Book Projector");
+            System.out.println("4. Cancel Booking");
+            System.out.println("5. View Availability");
+            System.out.println("6. Exit");
+            System.out.print("Enter choice: ");
+
+            int choice = sc.nextInt();
+            sc.nextLine();
+
+            if (choice >= 1 && choice <= 3) {
+
+                Resource selected =
+                        (choice == 1) ? lab :
+                        (choice == 2) ? hall :
+                                        projector;
+
+                System.out.print("Enter Start Time (9-17): ");
+                int start = sc.nextInt();
+
+                System.out.print("Enter End Time (9-17): ");
+                int end = sc.nextInt();
+                sc.nextLine();
+
+                System.out.print("Enter Role (Student / Staff / HOD): ");
+                String role = sc.nextLine();
+
+                Booking booking = new Booking(selected, start, end, role);
+                bookResource(booking);
+
+            } else if (choice == 4) {
+
+                System.out.println("Cancel which resource?");
+                System.out.println("1. Lab");
+                System.out.println("2. Seminar Hall");
+                System.out.println("3. Projector");
+
+                int c = sc.nextInt();
+                sc.nextLine();
+
+                if (c == 1) cancelBooking("Lab");
+                else if (c == 2) cancelBooking("Seminar Hall");
+                else if (c == 3) cancelBooking("Projector");
+                else System.out.println("Invalid option");
+
+            } else if (choice == 5) {
+                viewAvailability();
+
+            } else if (choice == 6) {
+                System.out.println("System closed.");
+                break;
+
+            } else {
+                System.out.println("Invalid choice.");
+            }
+        }
+        sc.close();
+    }
+
+    // ===== STATIC DATA =====
+    static Booking labBooking = null;
+    static Booking hallBooking = null;
+    static Booking projectorBooking = null;
+
+    // ===== LOGIC METHODS =====
+    static boolean isValidTime(int start, int end) {
+        return start >= 9 && end <= 17 && start < end;
+    }
+
+    static void bookResource(Booking newBooking) {
+
+        if (!isValidTime(newBooking.startTime, newBooking.endTime)) {
+            System.out.println("❌ Invalid time range.");
+            return;
+        }
+
+        Booking current = getCurrentBooking(newBooking.resource.name);
+
+        if (current == null || !current.active) {
+            setCurrentBooking(newBooking);
+            System.out.println("✅ Booking confirmed for " + newBooking.resource.name);
+            return;
+        }
+
+        if (ConflictResolver.isConflict(current, newBooking)) {
+
+            int oldP = ConflictResolver.getPriority(current.role);
+            int newP = ConflictResolver.getPriority(newBooking.role);
+
+            if (newP > oldP) {
+                current.active = false;
+                setCurrentBooking(newBooking);
+                System.out.println("🔁 Higher priority override. New booking confirmed.");
+            } else {
+                System.out.println("❌ Booking rejected due to lower priority.");
+            }
+
+        } else {
+            setCurrentBooking(newBooking);
+            System.out.println("✅ Booking confirmed.");
+        }
+    }
+
+    static Booking getCurrentBooking(String name) {
+        if (name.equals("Lab")) return labBooking;
+        if (name.equals("Seminar Hall")) return hallBooking;
+        if (name.equals("Projector")) return projectorBooking;
+        return null;
+    }
+
+    static void setCurrentBooking(Booking b) {
+        if (b.resource.name.equals("Lab")) labBooking = b;
+        if (b.resource.name.equals("Seminar Hall")) hallBooking = b;
+        if (b.resource.name.equals("Projector")) projectorBooking = b;
+    }
+
+    static void cancelBooking(String name) {
+        Booking b = getCurrentBooking(name);
+        if (b != null && b.active) {
+            b.active = false;
+            System.out.println("🗑 Booking cancelled. Resource freed.");
+        } else {
+            System.out.println("❌ No active booking found.");
+        }
+    }
+
+    static void viewAvailability() {
+        show("Lab", labBooking);
+        show("Seminar Hall", hallBooking);
+        show("Projector", projectorBooking);
+    }
+
+    static void show(String name, Booking b) {
+        if (b == null || !b.active)
+            System.out.println(name + ": Available");
+        else
+            System.out.println(name + ": Booked (" + b.role + ", "
+                    + b.startTime + "-" + b.endTime + ")");
+    }
+}
+
+// ===== SUPPORTING CLASSES (AFTER MAIN) =====
+
+class Resource {
+    String name;
+    Resource(String name) {
+        this.name = name;
+    }
+}
+
+class Booking {
+    Resource resource;
+    int startTime, endTime;
+    String role;
+    boolean active = true;
+
+    Booking(Resource r, int s, int e, String role) {
+        this.resource = r;
+        this.startTime = s;
+        this.endTime = e;
+        this.role = role;
+    }
+}
+
+class ConflictResolver {
+
+    static boolean isConflict(Booking a, Booking b) {
+        return b.startTime < a.endTime && a.startTime < b.endTime;
+    }
+
+    static int getPriority(String role) {
+        if (role.equalsIgnoreCase("HOD")) return 3;
+        if (role.equalsIgnoreCase("Staff")) return 2;
+        if (role.equalsIgnoreCase("Student")) return 1;
+        return 0;
+    }
+}
